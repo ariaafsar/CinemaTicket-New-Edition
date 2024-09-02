@@ -4,6 +4,13 @@ from django.shortcuts import get_object_or_404
 from cinemas.models import Showtime
 from .models import Booking
 import json
+import requests
+from rest_framework.generics import ListAPIView , RetrieveAPIView , CreateAPIView , DestroyAPIView
+from .serializers import TicketSerializer , TitcketBookingSerializer , BookingSerializer
+
+class BookTicets(CreateAPIView) :
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
 
 @csrf_exempt
 def book_ticket(request, showtime_id):
@@ -50,6 +57,9 @@ def list_bookings(request):
         return JsonResponse(bookings_list, safe=False)
     else:
         return JsonResponse({'error': 'Only GET method is allowed'}, status=405)
+class ListBookings(ListAPIView) :
+    queryset = Booking.objects.all()
+    serializerclass = BookingSerializer
 
 
 def welcome(request):
