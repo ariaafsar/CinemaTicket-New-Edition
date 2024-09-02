@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from .models import Cinema, Showtime
 from movies.models import Movie
 from django.shortcuts import get_object_or_404
+from rest_framework.generics import ListCreateAPIView , RetrieveDestroyAPIView , ListAPIView
+from .serializers import CinemaShow
 
 def showtimes_for_movie(request, movie_id):
     if request.method == 'GET':
@@ -10,3 +12,10 @@ def showtimes_for_movie(request, movie_id):
         return JsonResponse(list(showtimes), safe=False)
     else:
         return JsonResponse({'error': 'Only GET method is allowed'}, status=405)
+
+class ShowTimesForMovie(ListAPIView) :
+    serializer_class = CinemaShow
+    def get_queryset(self) :
+        movie_id = self.kwargs['movie_id']
+        return Showtime.objects.filter(movie_id=movie_id)
+    
