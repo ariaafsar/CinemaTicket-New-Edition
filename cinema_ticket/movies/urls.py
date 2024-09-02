@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import MovieSerializer
 
 urlpatterns = [
-    path('movies/', views.movie_list, name='movie_list'),
+    path('movies/', MovieSerializer.as_view(), name='movie-list'),
 ]
